@@ -1,15 +1,15 @@
-# Gym Tracker v2
+# Gym Tracker v2.2
 
 A mobile-first three-day strength tracker designed for progressive overload.
 
-## v2 additions
+## v2.2 additions
 - Automatic next-workout targets based on the previous working sets
 - Exercise-specific load increments
 - "Fill from last" button for quick gym entry
 - Personal bests
 - Progress chart for each exercise
 - Session-volume tracking
-- Full workout history
+- Full workout history in a compact set-by-set table
 - Technique reminders
 - Export/import JSON backup
 - PWA manifest + offline cache
@@ -72,3 +72,5 @@ python3 -m http.server 8000
 Then visit:
 
 `http://localhost:8000`
+
+- History is now a date-comparison table: each date is a grouped column with Reps and kg subcolumns; sets are shown as slash-separated values.
