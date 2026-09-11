@@ -1,6 +1,6 @@
-# Gym Tracker v4.1 — implementation assessment
+# Gym Tracker v4.2 — implementation assessment
 
-Reviewed: 11 September 2026. This assessment covers the deployed application and the subsequent v4.1 mobile import fix. It does not claim that the user’s phone data has been changed.
+Reviewed: 11 September 2026. This assessment covers the deployed application, the v4.1 mobile import fix and the v4.2 Android launcher-icon fix. It does not claim that the user’s phone data has been changed.
 
 ## Architecture and migration
 
@@ -29,7 +29,8 @@ The application remains a framework-free static PWA. Markup, styling and behavio
 - Imports validate dates, timestamps, types, numeric ranges and note lengths, escape displayed text, and report added/skipped/invalid counts.
 - Duplicate identities are based on day plus creation time for workouts and creation time for body entries, preserving the original record on repeat import.
 - Clearing data does not reseed the baseline because seeding occurs only while creating a new database.
-- The PWA cache is bumped to `gym-tracker-v5`; v4.1 asset URLs are fingerprinted so mobile browsers cannot reuse an older application script.
+- The PWA cache is bumped to `gym-tracker-v6`; v4.2 asset URLs are fingerprinted so mobile browsers cannot reuse older application or icon assets.
+- The original barbell SVG is supplemented by 192px, 512px, maskable and touch PNG icons for Android launcher compatibility.
 
 ## Verification performed
 
@@ -51,6 +52,7 @@ All browser scenarios used disposable localhost origins and generated fixtures. 
 - `node --check app.js`, manifest JSON parsing, `git diff --check`, and final app-tab console error/warning checks passed.
 - Imported the verified eight-workout version-2 backup in isolated Chromium and Firefox engines. Both reported 7 added, 1 skipped and 0 invalid on top of the fresh baseline, produced eight saved workouts, selected Day 3 next and identified Day 2 on 9 September 2026 as latest.
 - Confirmed import now waits for asynchronous IndexedDB initialization and has a `FileReader` fallback for mobile browsers without `File.text()`.
+- Rendered and inspected the original barbell artwork at 192px and 512px, validated all manifest icon sizes/purposes, confirmed every icon is precached, and reran the eight-workout import regression successfully.
 
 ## Remaining limitations
 

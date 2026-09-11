@@ -1595,7 +1595,7 @@ async function initializeApp() {
     await refreshAll();
     if (getPreference("activeTimer")) startTimerTicker();
     if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
-      navigator.serviceWorker.register("./sw.js?v=5", { updateViaCache: "none" }).then(registration => registration.update()).catch(() => {});
+      navigator.serviceWorker.register("./sw.js?v=6", { updateViaCache: "none" }).then(registration => registration.update()).catch(() => {});
     }
   } catch (error) {
     databaseOpenError = error;

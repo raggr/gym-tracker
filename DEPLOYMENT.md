@@ -2,7 +2,7 @@
 
 This directory is the authoritative source for the live Gym Tracker application.
 
-- Release: v4.1
+- Release: v4.2
 - Branch: `main`
 - Hosting: GitHub Pages via `.github/workflows/pages.yml`
 - Live URL: <https://raggr.github.io/gym-tracker/>
