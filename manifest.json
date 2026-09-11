@@ -4,8 +4,8 @@
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#f4f6f8",
-  "theme_color": "#0f172a",
+  "background_color": "#181715",
+  "theme_color": "#181715",
   "description": "Three-day strength training and progressive overload tracker.",
   "icons": [
     {
