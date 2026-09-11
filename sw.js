@@ -1,5 +1,5 @@
-const CACHE="gym-tracker-v4";
-const ASSETS=["./","./index.html","./styles.css","./app.js","./manifest.json","./icon.svg"];
+const CACHE="gym-tracker-v5";
+const ASSETS=["./","./index.html","./styles.css?v=4.1","./app.js?v=4.1","./manifest.json?v=4.1","./icon.svg?v=4.1"];
 self.addEventListener("install",e=>{self.skipWaiting();e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)))});
 self.addEventListener("activate",e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
 self.addEventListener("fetch",e=>{

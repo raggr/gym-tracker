@@ -1,6 +1,8 @@
-# Gym Tracker v4
+# Gym Tracker v4.1
 
 A lightweight, mobile-first tracker for a three-day strength routine and conservative progressive overload. It is plain HTML, CSS and JavaScript, has no backend or build step, and remains compatible with GitHub Pages.
+
+Version 4.1 makes backup import wait for IndexedDB initialization, includes a `FileReader` fallback for mobile browsers, and fingerprints deployed assets so Firefox and Chrome cannot retain an older application script after an update.
 
 ## Architecture
 

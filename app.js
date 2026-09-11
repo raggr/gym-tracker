@@ -50,6 +50,8 @@ const STORES = {
 const EFFORT_OPTIONS = ["", "Easy", "About right", "Hard", "Max effort"];
 
 let db;
+let appReady;
+let databaseOpenError = null;
 let isNewDatabase = false;
 let activeWorkoutDay = "day1";
 let activeProgressDay = "day1";
@@ -175,6 +177,13 @@ function transactionDone(transaction) {
     transaction.onerror = () => reject(transaction.error);
     transaction.onabort = () => reject(transaction.error);
   });
+}
+
+async function waitForDatabase() {
+  if (appReady) await appReady;
+  if (!db) {
+    throw databaseOpenError || new Error("Local storage could not be opened. Reload the app and try again.");
+  }
 }
 
 function getAll(storeName) {
@@ -1414,7 +1423,8 @@ async function exportData() {
 }
 
 async function importData(file) {
-  const parsed = JSON.parse(await file.text());
+  await waitForDatabase();
+  const parsed = JSON.parse(await readFileText(file));
   if (!parsed || typeof parsed !== "object" || !Array.isArray(parsed.workouts)) throw new Error("Invalid backup file. Expected a workout backup.");
   if (parsed.bodyMetrics !== undefined && !Array.isArray(parsed.bodyMetrics)) throw new Error("Invalid body-measurement data.");
   if (parsed.drafts !== undefined && !Array.isArray(parsed.drafts)) throw new Error("Invalid draft data.");
@@ -1492,6 +1502,16 @@ async function importData(file) {
   return counts;
 }
 
+function readFileText(file) {
+  if (typeof file.text === "function") return file.text();
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result || ""));
+    reader.onerror = () => reject(reader.error || new Error("The selected backup could not be read."));
+    reader.readAsText(file);
+  });
+}
+
 function importMessage(counts) {
   return [
     `Workouts: ${counts.workouts.added} added, ${counts.workouts.skipped} skipped, ${counts.workouts.invalid} invalid`,
@@ -1565,7 +1585,7 @@ window.addEventListener("pagehide", () => {
   if (draftCache.has(activeWorkoutDay)) void persistDraft(activeWorkoutDay);
 });
 
-(async () => {
+async function initializeApp() {
   try {
     db = await openDB();
     if (isNewDatabase && (await getAll(STORES.workouts)).length === 0) await addOne(STORES.workouts, seedWorkout());
@@ -1575,10 +1595,13 @@ window.addEventListener("pagehide", () => {
     await refreshAll();
     if (getPreference("activeTimer")) startTimerTicker();
     if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
-      navigator.serviceWorker.register("./sw.js").catch(() => {});
+      navigator.serviceWorker.register("./sw.js?v=5", { updateViaCache: "none" }).then(registration => registration.update()).catch(() => {});
     }
   } catch (error) {
+    databaseOpenError = error;
     document.getElementById("workoutDay").innerHTML = '<div class="card"><div class="empty">The local database could not be opened. Reload the app and try again.</div></div>';
     console.error(error);
   }
-})();
+}
+
+appReady = initializeApp();

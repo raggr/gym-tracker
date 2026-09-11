@@ -1,6 +1,6 @@
-# Gym Tracker v4 — implementation assessment
+# Gym Tracker v4.1 — implementation assessment
 
-Reviewed: 11 September 2026. This assessment covers the uncommitted files in this tracked `gym_tracker_v2` application and the consolidated “Make now” scope. It does not claim that the GitHub Pages deployment or the user’s phone data has been changed.
+Reviewed: 11 September 2026. This assessment covers the deployed application and the subsequent v4.1 mobile import fix. It does not claim that the user’s phone data has been changed.
 
 ## Architecture and migration
 
@@ -29,7 +29,7 @@ The application remains a framework-free static PWA. Markup, styling and behavio
 - Imports validate dates, timestamps, types, numeric ranges and note lengths, escape displayed text, and report added/skipped/invalid counts.
 - Duplicate identities are based on day plus creation time for workouts and creation time for body entries, preserving the original record on repeat import.
 - Clearing data does not reseed the baseline because seeding occurs only while creating a new database.
-- The PWA cache is bumped to `gym-tracker-v4` and explicitly includes the split CSS and JavaScript assets.
+- The PWA cache is bumped to `gym-tracker-v5`; v4.1 asset URLs are fingerprinted so mobile browsers cannot reuse an older application script.
 
 ## Verification performed
 
@@ -49,6 +49,8 @@ All browser scenarios used disposable localhost origins and generated fixtures. 
 - At an explicit 390 × 844 viewport, measured 390 CSS pixels wide with no page-level horizontal overflow, 16px form text and 44px interactive button/input heights; the 22px timer checkboxes sit inside 44px labels.
 - Loaded a new route successfully after stopping the local server, confirming the updated PWA cache supports offline navigation and restores its IndexedDB draft.
 - `node --check app.js`, manifest JSON parsing, `git diff --check`, and final app-tab console error/warning checks passed.
+- Imported the verified eight-workout version-2 backup in isolated Chromium and Firefox engines. Both reported 7 added, 1 skipped and 0 invalid on top of the fresh baseline, produced eight saved workouts, selected Day 3 next and identified Day 2 on 9 September 2026 as latest.
+- Confirmed import now waits for asynchronous IndexedDB initialization and has a `FileReader` fallback for mobile browsers without `File.text()`.
 
 ## Remaining limitations
 
@@ -56,4 +58,4 @@ All browser scenarios used disposable localhost origins and generated fixtures. 
 - A completed timer remains visible as “Rest complete” until stopped; background operating-system notifications are not implemented.
 - Extra unlabeled historical sets are kept as recorded but are not retroactively classified as warm-up or working sets.
 - Existing records do not gain setup notes, effort or completion metadata unless edited by future workflows; no inference is made.
-- Deployment, a physical-phone check and live personal-data migration are intentionally outside this uncommitted test pass.
+- A physical Android Firefox/Chrome check remains user-side; automated Chromium and Firefox engine checks pass.
